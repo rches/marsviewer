@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {DatePicker} from './components/datepicker/datepicker'
-import {ImageOut,} from './components/imageout/imageout'
-import {MediaBox, Card, CardTitle, Col} from 'react-materialize';
+import {MediaBox, Card, CardTitle} from 'react-materialize';
 import './App.css';
 import axios from 'axios';
 
