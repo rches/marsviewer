@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import {MediaBox, Card, CardTitle} from 'react-materialize';
+import {MediaBox, Card, CardTitle, Col, Row} from 'react-materialize';
 import './App.css';
 import axios from 'axios';
+
 
 class App extends Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class App extends Component {
       value: "",
       images: "",
       isLoading: true,
+      error: false
 
     };
 
@@ -39,13 +41,20 @@ class App extends Component {
       )
       .catch(error => {
         if (error.response) {
+          this.setState({
+            images: error.gif
+          })
           console.log(error.response.data);
           console.log(error.response.status);
           console.log(error.response.headers);
         } else if (error.request) {
           console.log(error.request);
         } else {
-          console.log('Error', error.message);
+          this.setState({
+            isLoading: false,
+            images: "https://www.simplystamps.com/media/catalog/product/E/M/EMOJI_11.png"
+          })
+          console.log('Boogers', error.message);
         }
           console.log(error.config);
       });
@@ -56,38 +65,47 @@ class App extends Component {
     console.log(this.state.value);
     return (
       
-      <div>        
+      <div>   
+            
           <form className="earthdate" onSubmit={this.handleSubmit}>
-          Date:              
+          <Row>
+          <Col  s={2}>
+          Date:
+          </Col> 
+          <Col  s={10}>            
                <input
                 type="date"
                 value={this.state.value}
                 onChange={this.handleChange}
-              />            
+              />
+              </Col> 
+              </Row> 
+
             <input type="submit" value="Submit" />
           </form>
         
         <hr />
-        
-          <div className='imageDisplay'> {this.state.isLoading?
+
+        <Col l={1} m={6} s={1} className="container"> {this.state.isLoading?
            <Card 
             className='small' 
             header={
               <CardTitle image='http://mars.jpl.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/01504/opgs/edr/fcam/FLB_531027377EDR_F0590000FHAZ00337M_.JPG'>
               View Mars!
               </CardTitle>
+              
             }>
             Test out by selecting a date from above!
           </Card>
-          : 
+          :                    
           <MediaBox 
           src={this.state.images} 
           caption={this.state.value} 
-          width="350"/>}
+          className="container"/>
+          }  
+          </Col>
         
-        </div>
-        
-    </div>);
+  </div>);
 
     
   }
