@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import {MediaBox, Card, CardTitle, Col, Row} from 'react-materialize';
+import {Header} from './components/layout/header';
+import {Footer} from './components/layout/footer';
+import {Images} from './components/layout/images';
+import {Grid, Paper, Button, TextField, Typography} from '@material-ui/core';
 import './App.css';
 import axios from 'axios';
 
 
-class App extends Component {
+export default class App extends Component {
   constructor(props) {
     super(props);
 
@@ -36,79 +39,55 @@ class App extends Component {
       .then(response =>       
         this.setState({ 
           images: response.data.photos[1].img_src, 
-          isLoading: false 
+          isLoading: false
         })
       )
-      .catch(error => {
-        if (error.response) {
-          this.setState({
-            images: error.gif
-          })
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          this.setState({
-            isLoading: false,
-            images: "https://www.simplystamps.com/media/catalog/product/E/M/EMOJI_11.png"
-          })
-          console.log('Boogers', error.message);
-        }
-          console.log(error.config);
+      .catch( error => {
+        this.setState({
+          images:"https://media.makeameme.org/created/houston-we-have-5acf5f.jpg",
+          isLoading: false
+        });
+        console.log('Houston, we have a problem:', error);
+        
       });
     event.preventDefault();
   }
 
   render() {
-    console.log(this.state.value);
-    return (
-      
-      <div>   
-            
-          <form className="earthdate" onSubmit={this.handleSubmit}>
-          <Row>
-          <Col  s={2}>
-          Date:
-          </Col> 
-          <Col  s={10}>            
-               <input
+    return  (
+    <>
+        <Header classes="header"/>
+        <Typography color='secondary' variant='body1' align='center'>
+          Ever wonder what the Curiosity Rover is looking at on a daily basis? Select a date below and see!
+        </Typography>
+          <Grid container alignContent='space-around'>
+            <Grid item xs>
+            <form className="earthdate" onSubmit={this.handleSubmit}>
+            <TextField
+                fullWidth
+                id="date"
                 type="date"
+                defaultValue="2016-10-29"
                 value={this.state.value}
                 onChange={this.handleChange}
               />
-              </Col> 
-              </Row> 
 
-            <input type="submit" value="Submit" />
+            <Button fullWidth color='secondary' variant="outlined" type="submit">Show me some Mars!</Button>
+
           </form>
-        
-        <hr />
+          </Grid>
+          </Grid> 
+          <Grid container alignContent='space-around'>
+<Grid item xs>
+<Paper>
+<Images className='image-viewer' isLoading={this.state.isLoading} images={this.state.images} in={this.state.isLoading}/>
+</Paper>
+</Grid>
+</Grid>
 
-        <Col l={1} m={6} s={1} className="container"> {this.state.isLoading?
-           <Card 
-            className='small' 
-            header={
-              <CardTitle image='http://mars.jpl.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/01504/opgs/edr/fcam/FLB_531027377EDR_F0590000FHAZ00337M_.JPG'>
-              View Mars!
-              </CardTitle>
-              
-            }>
-            Test out by selecting a date from above!
-          </Card>
-          :                    
-          <MediaBox 
-          src={this.state.images} 
-          caption={this.state.value} 
-          className="container"/>
-          }  
-          </Col>
+        <Footer classes="footer" image={this.state.images}/> 
         
-  </div>);
-
-    
+    </>
+    );
   }
 }
-
-export default App;
